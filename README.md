@@ -20,10 +20,10 @@ the parent FREEZER barcode.
 Example CSV output:
 
 | BARCODE | NAME | LOCATION BARCODE |
-| --- | --- | --- |
-| | F2S1 | FRZ2 |
-| | F2S2 | FRZ2 |
-| | F2S3 | FRZ2 |
+| --- | :---: | :---: |
+|  | F2S1 | FRZ2 |
+|  | F2S2 | FRZ2 |
+|  | F2S3 | FRZ2 |
 
 ## Dependencies
 The "csv" module is required and comes installed with Python.
