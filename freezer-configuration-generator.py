@@ -19,6 +19,10 @@ the parent FREEZER barcode.
 '''
 
 import csv
+import xlsxwriter
+
+
+
 
 # Freezer configuration via LIMS must first occur
 freezer = 'F2'
@@ -37,13 +41,13 @@ num_shelf_created = 0
 rack_prefix = 'R'
 rack_starting_index = 1
 barcode_rack_prefix = 'RCK'
-barcode_rack_starting_index = 16
+barcode_rack_starting_index = 31
 num_rack_created = 0
 
 drawer_prefix = 'D'
 drawer_starting_index = 1
 barcode_drawer_prefix = 'DRW'
-barcode_drawer_starting_index = 150
+barcode_drawer_starting_index = 255
 num_drawer_created = 0
 
 box_prefix = 'B'
@@ -58,13 +62,41 @@ num_rack    = 5
 num_drawer  = 7
 num_box     = 4
 
+
+
+
+# FUNCTIONS --------------------------------------------
+
+def writeExcel(filename, data):
+
+    workbook = xlsxwriter.Workbook(filename)
+    worksheet = workbook.add_worksheet()
+    worksheet.write(0, 0, 'BARCODE')
+    worksheet.write(0, 1, 'NAME')
+    worksheet.write(0, 2, 'LOCATION BARCODE')
+    worksheet_row = 1
+
+    for d in data:
+        barcode = d[0]
+        name = d[1]
+        barcode_location = d[2]
+
+        worksheet.write(worksheet_row, 0, barcode)
+        worksheet.write(worksheet_row, 1, name)
+        worksheet.write(worksheet_row, 2, barcode_location)
+
+        worksheet_row += 1
+
+    workbook.close()
+
+
+
+# CODE # FUNCTIONS --------------------------------------------
+
 # ---------------------------------------------------------------------------------------------------------------------
 # SHELF Loop
 # Output example: "", "F2S1", "FRZ2"
-ofile  = open('shelf.csv', "wb")
-writer = csv.writer(ofile, delimiter=',', quotechar='"', quoting=csv.QUOTE_ALL)
-
-writer.writerow( ('BARCODE','NAME','LOCATION BARCODE') )
+exceldata = []
 
 shelf_index = shelf_starting_index # reset shelf index foreach rack
 
@@ -74,21 +106,19 @@ for i in range (0, num_shelf):
     name = freezer + shelf_prefix + str(shelf_index)
     barcode_location = barcode_freezer
 
-    writer.writerow( (barcode, name, barcode_location) )
+    # add data to list
+    exceldata.append([barcode, name, barcode_location])
 
     shelf_index += 1   # increment to next shelf
 
     num_shelf_created += 1
 
-ofile.close()
+writeExcel('shelf-data.xlsx', exceldata)
 
 # ---------------------------------------------------------------------------------------------------------------------
 # RACK LOOP
 # Output example: "", "F2S1R1", "SHF4"
-ofile  = open('rack.csv', "wb")
-writer = csv.writer(ofile, delimiter=',', quotechar='"', quoting=csv.QUOTE_ALL)
-
-writer.writerow( ('BARCODE','NAME','LOCATION BARCODE') )
+exceldata = []
 
 shelf_index = shelf_starting_index # reset shelf index foreach rack
 
@@ -102,7 +132,8 @@ for i in range (0, num_shelf):
         name = freezer + shelf_prefix + str(shelf_index) + rack_prefix + str(rack_index)
         barcode_location = barcode_shelf_prefix + str(barcode_shelf_starting_index)
 
-        writer.writerow( (barcode, name, barcode_location) )
+        # add data to list
+        exceldata.append([barcode, name, barcode_location])
 
         rack_index += 1   # increment to next shelf
 
@@ -111,16 +142,13 @@ for i in range (0, num_shelf):
     shelf_index += 1   # increment to next shelf
     barcode_shelf_starting_index += 1   # increment to next shelf
 
-ofile.close()
+writeExcel('rack-data.xlsx', exceldata)
 
 
 # ---------------------------------------------------------------------------------------------------------------------
 # DRAWER LOOP
 # Output example: "", "F2S7R16D1", "RCK31"
-ofile  = open('drawer.csv', "wb")
-writer = csv.writer(ofile, delimiter=',', quotechar='"', quoting=csv.QUOTE_ALL)
-
-writer.writerow( ('BARCODE','NAME','LOCATION BARCODE') )
+exceldata = []
 
 shelf_index = shelf_starting_index # reset shelf index foreach rack
 
@@ -138,7 +166,8 @@ for i in range (0, num_shelf):
             name = freezer + shelf_prefix + str(shelf_index) + rack_prefix + str(rack_index) + drawer_prefix + str(drawer_index)
             barcode_location = barcode_rack_prefix + str(barcode_rack_starting_index)
 
-            writer.writerow( (barcode, name, barcode_location) )
+            # add data to list
+            exceldata.append([barcode, name, barcode_location])
 
             drawer_index += 1   # increment to next shelf
 
@@ -151,15 +180,12 @@ for i in range (0, num_shelf):
     shelf_index += 1   # increment to next shelf
     barcode_shelf_starting_index += 1   # increment to next shelf
 
-ofile.close()
+writeExcel('drawer-data.xlsx', exceldata)
 
 # ---------------------------------------------------------------------------------------------------------------------
 # BOX LOOP
 # Output example: "", "F2S1R1D1B1", "DRW_"
-ofile  = open('box.csv', "wb")
-writer = csv.writer(ofile, delimiter=',', quotechar='"', quoting=csv.QUOTE_ALL)
-
-writer.writerow( ('BARCODE','NAME','LOCATION BARCODE') )
+exceldata = []
 
 shelf_index = shelf_starting_index
 rack_index = rack_starting_index
@@ -186,7 +212,8 @@ for i in range (0, num_shelf):
                 name = freezer + shelf_prefix + str(shelf_index) + rack_prefix + str(rack_index) + drawer_prefix + str(drawer_index) + box_prefix + str(box_index)
                 barcode_location = barcode_drawer_prefix + str(barcode_drawer_starting_index)
 
-                writer.writerow( (barcode, name, barcode_location) )
+                # add data to list
+                exceldata.append([barcode, name, barcode_location])
 
                 box_index += 1   # increment to next shelf
 
@@ -201,10 +228,16 @@ for i in range (0, num_shelf):
     shelf_index += 1   # increment to next shelf
     barcode_shelf_starting_index += 1   # increment to next shelf
 
-ofile.close()
+writeExcel('box-data.xlsx', exceldata)
+
+
 
 print "OUTPUT:"
 print 'Number of shelves created: ' + str(num_shelf_created)
 print 'Number of racks created: ' + str(num_rack_created)
 print 'Number of drawers created: ' + str(num_drawer_created)
 print 'Number of boxes created: ' + str(num_box_created)
+
+
+
+
