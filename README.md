@@ -1,7 +1,7 @@
 # Core Informatics Utilities
 
 ## Freezer configuration
-A utility for generating configuration data in the form of CSV files is available as a Python (2.7+) script:
+A utility for generating configuration data in the form of Excel files is available as a Python (2.7+) script:
 
 `freezer-configuration-generator.py`
 
@@ -17,7 +17,7 @@ Output (for each level) will need to be 3 columns. Headers are
 The values for BARCODE should remain blank, but are there as placeholders for LIMS-generated barcodes. The LOCATION BARCODE is the *parent* entity's barcode. For example, if entering a SHELF, then the LOCATION BARCODE would be
 the parent FREEZER barcode.
 
-Example CSV output:
+Example Excel output:
 
 | BARCODE | NAME | LOCATION BARCODE |
 | --- | :---: | :---: |
@@ -26,4 +26,5 @@ Example CSV output:
 |  | F2S3 | FRZ2 |
 
 ## Dependencies
-The "csv" module is required and comes installed with Python.
+The [xlsxwriter](https://github.com/jmcnamara/XlsxWriter) module is required and can easily be installed with
+`pip install xlsxwriter`.
