@@ -5,69 +5,61 @@ Freezer configuration builder
 
 Developed for use with Core Informatics LIMS location configuration
 
-This script assumes the following organization:
-  freezer > shelf > rack > drawer > box
-
-Output (for each level) will need to be 3 columns. Headers are
- - BARCODE
- - NAME
- - LOCATION BARCODE
-The values for BARCODE are blank. The LOCATION BARCODE is the PARENT
-barcode. For example, if entering a SHELF, then the LOCATION BARCODE would be
-the parent FREEZER barcode.
+See README.md for documentation.
 
 '''
 
-import csv
 import xlsxwriter
 
-#
-# Configuration
-#
+# CONFIGURATION START ----------------------------------
 
-# Freezer configuration via LIMS must first occur
+# Freezer name and barcode
 freezer = 'F2'
 barcode_freezer = 'FRZ2'
 
-# Prefix and 'Starting index' needs to be looked up via the
+# Prefix and 'Starting index' needs to be looked up in C.I. LIMS via the
 # Admin > Location > ENTITY_TYPE > List All. From there, find the
 # appropriate values
 
-shelf_prefix = 'S'
-shelf_starting_index = 1
-barcode_shelf_prefix = 'SHF'
-barcode_shelf_starting_index = 4
-num_shelf_created = 0
+# What containers should be built?
+containers_to_use = ['c1', 'c2', 'c3', 'c4']
 
-rack_prefix = 'R'
-rack_starting_index = 1
-barcode_rack_prefix = 'RCK'
-barcode_rack_starting_index = 31
-num_rack_created = 0
+# Configuration of containers to build
+containers_config = {
+    'c1': {
+        'name_prefix': 'S',
+        'name_starting_index': 1,
+        'barcode_prefix': 'SHF',
+        'barcode_starting_index': 4,
+        'number_to_create': 3
+    },
+    'c2': {
+        'name_prefix': 'R',
+        'name_starting_index': 1,
+        'barcode_prefix': 'RCK',
+        'barcode_starting_index': 31,
+        'number_to_create': 5
+    },
+    'c3': {
+        'name_prefix': 'D',
+        'name_starting_index': 1,
+        'barcode_prefix': 'DRW',
+        'barcode_starting_index': 255,
+        'number_to_create': 7
+    },
+    'c4': {
+        'name_prefix': 'B',
+        'name_starting_index': 1,
+        'barcode_prefix': 'FB',
+        'barcode_starting_index': 421,
+        'number_to_create': 4
+    }
+}
 
-drawer_prefix = 'D'
-drawer_starting_index = 1
-barcode_drawer_prefix = 'DRW'
-barcode_drawer_starting_index = 255
-num_drawer_created = 0
+# CONFIGURATION END ------------------------------------
 
-box_prefix = 'B'
-box_starting_index = 1
-barcode_box_prefix = 'FB'
-barcode_box_starting_index = 421
-num_box_created = 0
+# FUNCTIONS --------------------------------------------
 
-# number of entities, per parent (freezer is top level)
-num_shelf = 3
-num_rack = 5
-num_drawer = 7
-num_box = 4
-
-
-
-#
-# FUNCTIONS
-#
 def writeExcel(filename, data):
 
     workbook = xlsxwriter.Workbook(filename)
@@ -91,153 +83,122 @@ def writeExcel(filename, data):
     workbook.close()
 
 
+
+# CODE # FUNCTIONS --------------------------------------------
+# print containers_to_use
+# ranges = [ range(x) for x in containers_to_use ]
+# for i in itertools.product(*ranges):
+#     print i
+
+
+
+# for key, value in sorted(containers_config.items()):
 #
-# CODE
+#     print '-' * 20
+#     print 'Processing container ' + key
 #
+#     # Get individual container data
+#     for key2, value2 in value.items():
+#         print key2, value2
 
-# ---------------------------------------------------------------------------------------------------------------------
-# SHELF Loop
-# Output example: "", "F2S1", "FRZ2"
-exceldata = []
+c1_exceldata = []
+c2_exceldata = []
+c3_exceldata = []
+c4_exceldata = []
+c1_exceldata
+# Loop through each container
 
-shelf_index = shelf_starting_index # reset shelf index foreach rack
+##################
+# Go to c1 level
+c1_index = containers_config['c1']['name_starting_index'] # reset shelf index foreach rack
 
-for i in range (0, num_shelf):
+for i in range(0, containers_config['c1']['number_to_create']):
 
+    # set up values
     barcode = ''
-    name = freezer + shelf_prefix + str(shelf_index)
+    name = freezer + containers_config['c1']['name_prefix'] + str(c1_index)
     barcode_location = barcode_freezer
 
     # add data to list
-    exceldata.append([barcode, name, barcode_location])
-
-    shelf_index += 1   # increment to next shelf
-
-    num_shelf_created += 1
-
-writeExcel('shelf-data.xlsx', exceldata)
-
-# ---------------------------------------------------------------------------------------------------------------------
-# RACK LOOP
-# Output example: "", "F2S1R1", "SHF4"
-exceldata = []
-
-shelf_index = shelf_starting_index # reset shelf index foreach rack
-
-for i in range (0, num_shelf):
-
-    rack_index = rack_starting_index # reset rack index
-
-    for j in range (0, num_rack):
-
-        barcode = ''
-        name = freezer + shelf_prefix + str(shelf_index) + rack_prefix + str(rack_index)
-        barcode_location = barcode_shelf_prefix + str(barcode_shelf_starting_index)
-
-        # add data to list
-        exceldata.append([barcode, name, barcode_location])
-
-        rack_index += 1   # increment to next shelf
-
-        num_rack_created += 1
-
-    shelf_index += 1   # increment to next shelf
-    barcode_shelf_starting_index += 1   # increment to next shelf
-
-writeExcel('rack-data.xlsx', exceldata)
+    c1_exceldata.append([barcode, name, barcode_location])
 
 
-# ---------------------------------------------------------------------------------------------------------------------
-# DRAWER LOOP
-# Output example: "", "F2S7R16D1", "RCK31"
-exceldata = []
+    ##################
+    # Go to c2 level
+    if('c2' in containers_to_use):
 
-shelf_index = shelf_starting_index # reset shelf index foreach rack
+        c2_index = containers_config['c2']['name_starting_index'] # reset shelf index foreach rack
 
-for i in range (0, num_shelf):
+        for i in range(0, containers_config['c2']['number_to_create']):
 
-    rack_index = rack_starting_index # reset rack index
-
-    for j in range (0, num_rack):
-
-        drawer_index = drawer_starting_index # reset rack index
-
-        for k in range (0, num_drawer):
-
+            # set up values
             barcode = ''
-            name = freezer + shelf_prefix + str(shelf_index) + rack_prefix + str(rack_index) + drawer_prefix + str(drawer_index)
-            barcode_location = barcode_rack_prefix + str(barcode_rack_starting_index)
+            name = freezer + containers_config['c1']['name_prefix'] + str(c1_index) + containers_config['c2']['name_prefix'] + str(c2_index)
+            barcode_location = containers_config['c1']['barcode_prefix'] + str(containers_config['c1']['barcode_starting_index'])
 
             # add data to list
-            exceldata.append([barcode, name, barcode_location])
-
-            drawer_index += 1   # increment to next shelf
-
-            num_drawer_created += 1
+            c2_exceldata.append([barcode, name, barcode_location])
 
 
-        rack_index += 1   # increment to next shelf
-        barcode_rack_starting_index += 1   # increment to next shelf
+            ##################
+            # Go to c3 level
+            if('c3' in containers_to_use):
+                c3_index = containers_config['c3']['name_starting_index'] # reset shelf index foreach rack
 
-    shelf_index += 1   # increment to next shelf
-    barcode_shelf_starting_index += 1   # increment to next shelf
+                for i in range(0, containers_config['c3']['number_to_create']):
 
-writeExcel('drawer-data.xlsx', exceldata)
+                    # set up values
+                    barcode = ''
+                    name = freezer + containers_config['c1']['name_prefix'] + str(c1_index) + containers_config['c2']['name_prefix'] + str(c2_index) + containers_config['c3']['name_prefix'] + str(c3_index)
+                    barcode_location = containers_config['c2']['barcode_prefix'] + str(containers_config['c2']['barcode_starting_index'])
 
-# ---------------------------------------------------------------------------------------------------------------------
-# BOX LOOP
-# Output example: "", "F2S1R1D1B1", "DRW_"
-exceldata = []
+                    # add data to list
+                    c3_exceldata.append([barcode, name, barcode_location])
 
-shelf_index = shelf_starting_index
-rack_index = rack_starting_index
-drawer_index = drawer_starting_index
-box_index = box_starting_index
+                    ##################
+                    # Go to c4 level
+                    if('c4' in containers_to_use):
 
-shelf_index = shelf_starting_index # reset shelf index foreach rack
+                        c4_index = containers_config['c4']['name_starting_index'] # reset shelf index foreach rack
 
-for i in range (0, num_shelf):
+                        for i in range(0, containers_config['c4']['number_to_create']):
 
-    rack_index = rack_starting_index # reset rack index
+                            # set up values
+                            barcode = ''
+                            name = freezer + containers_config['c1']['name_prefix'] + str(c1_index) + containers_config['c2']['name_prefix'] + str(c2_index) + containers_config['c3']['name_prefix'] + str(c3_index) + containers_config['c4']['name_prefix'] + str(c4_index)
+                            barcode_location = containers_config['c3']['barcode_prefix'] + str(containers_config['c3']['barcode_starting_index'])
 
-    for j in range (0, num_rack):
+                            # add data to list
+                            c4_exceldata.append([barcode, name, barcode_location])
 
-        drawer_index = drawer_starting_index # reset rack index
+                            # increment to next container
+                            c4_index += 1
 
-        for k in range (0, num_drawer):
+                    # increment to next container
+                    c3_index += 1
+                    containers_config['c3']['barcode_starting_index']  += 1
 
-            box_index = box_starting_index # reset rack index
-
-            for l in range (0, num_box):
-
-                barcode = ''
-                name = freezer + shelf_prefix + str(shelf_index) + rack_prefix + str(rack_index) + drawer_prefix + str(drawer_index) + box_prefix + str(box_index)
-                barcode_location = barcode_drawer_prefix + str(barcode_drawer_starting_index)
-
-                # add data to list
-                exceldata.append([barcode, name, barcode_location])
-
-                box_index += 1   # increment to next shelf
-
-                num_box_created += 1
-
-            drawer_index += 1   # increment to next shelf
-            barcode_drawer_starting_index += 1   # increment to next shelf
-
-        rack_index += 1   # increment to next shelf
-        barcode_rack_starting_index += 1   # increment to next shelf
-
-    shelf_index += 1   # increment to next shelf
-    barcode_shelf_starting_index += 1   # increment to next shelf
-
-writeExcel('box-data.xlsx', exceldata)
-
-print "OUTPUT:"
-print 'Number of shelves created: ' + str(num_shelf_created)
-print 'Number of racks created: ' + str(num_rack_created)
-print 'Number of drawers created: ' + str(num_drawer_created)
-print 'Number of boxes created: ' + str(num_box_created)
+            # increment to next container
+            c2_index += 1
+            containers_config['c2']['barcode_starting_index']  += 1
 
 
+    # increment to next container
+    c1_index += 1
+    containers_config['c1']['barcode_starting_index']  += 1
 
+print "-" * 80
+dict = {}
+dict['c1'] = c1_exceldata
+dict['c2'] = c2_exceldata
+dict['c3'] = c3_exceldata
+dict['c4'] = c4_exceldata
 
+for c in containers_to_use:
+    filename = c + '_exceldata.xlsx'
+    array_name = str(c) + '_exceldata'
+    #writeExcel('c1_exceldata.xlsx', c1_exceldata)
+    writeExcel(filename, dict[c])
+    print "Saved " + str(len(dict[c])) + " records to " + filename
+
+print "-" * 80
