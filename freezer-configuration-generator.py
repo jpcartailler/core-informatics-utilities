@@ -21,8 +21,9 @@ the parent FREEZER barcode.
 import csv
 import xlsxwriter
 
-
-
+#
+# Configuration
+#
 
 # Freezer configuration via LIMS must first occur
 freezer = 'F2'
@@ -57,16 +58,16 @@ barcode_box_starting_index = 421
 num_box_created = 0
 
 # number of entities, per parent (freezer is top level)
-num_shelf   = 3
-num_rack    = 5
-num_drawer  = 7
-num_box     = 4
+num_shelf = 3
+num_rack = 5
+num_drawer = 7
+num_box = 4
 
 
 
-
-# FUNCTIONS --------------------------------------------
-
+#
+# FUNCTIONS
+#
 def writeExcel(filename, data):
 
     workbook = xlsxwriter.Workbook(filename)
@@ -90,8 +91,9 @@ def writeExcel(filename, data):
     workbook.close()
 
 
-
-# CODE # FUNCTIONS --------------------------------------------
+#
+# CODE
+#
 
 # ---------------------------------------------------------------------------------------------------------------------
 # SHELF Loop
@@ -229,8 +231,6 @@ for i in range (0, num_shelf):
     barcode_shelf_starting_index += 1   # increment to next shelf
 
 writeExcel('box-data.xlsx', exceldata)
-
-
 
 print "OUTPUT:"
 print 'Number of shelves created: ' + str(num_shelf_created)
