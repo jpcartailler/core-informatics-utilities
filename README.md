@@ -9,6 +9,14 @@ Currently, the script assumes the following organization of a FREEZER:
 
 > FREEZER > SHELF > RACK > DRAWER > BOX
 
+Example freezer setup:
+
+| | Freezer | Shelf | Rack | Drawer | Box |
+| :---: | :---: | :---: | :---: | :---: | :---: |
+| # of containers per parent | 1 | 3 | 5 | 7 | 4 |
+| Expect container totals | 1 | 3 | 15 |105 | 420 |
+
+
 Output (for each level) will need to be 3 columns. Headers are
  - BARCODE
  - NAME
