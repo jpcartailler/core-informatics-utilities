@@ -22,13 +22,18 @@ The script abstracts out each level into a "container", creating a tree describe
 ### Input
 Currently, the input is setup within the script, but this could eventually be factored out into a config/input file. For the example above, the following configuration would work:
 
-First, set up the freezer:
+Pick a delimiter - when creating the location names, include a delimiter if desired. For example, F2S3R1D1B4 vs F2-S3-R1-D1-B4:
+```python
+name_delimiter = '-'
+```
+
+Set up the freezer:
 ```python
 freezer = 'F2'
 barcode_freezer = 'FRZ2'
 ```
 
-Secondly, set what containers to parse through:
+Set what containers to parse through:
 ```python
 containers_to_use = ['c1', 'c2', 'c3', 'c4']
 ```
