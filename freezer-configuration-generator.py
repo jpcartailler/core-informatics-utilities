@@ -13,6 +13,10 @@ import xlsxwriter
 
 # CONFIGURATION START ----------------------------------
 
+# when creating the location names, include a delimiter if desired
+# for example, F2S3R1D1B4 vs F2-S3-R1-D1-B4
+name_delimiter = '-'
+
 # Freezer name and barcode
 freezer = 'F2'
 barcode_freezer = 'FRZ2'
@@ -116,12 +120,12 @@ for i in range(0, containers_config['c1']['number_to_create']):
 
     # set up values
     barcode = ''
-    name = freezer + containers_config['c1']['name_prefix'] + str(c1_index)
+    name = freezer + name_delimiter + containers_config['c1']['name_prefix'] + str(c1_index)
+    c1_parent_name = name
     barcode_location = barcode_freezer
 
     # add data to list
     c1_exceldata.append([barcode, name, barcode_location])
-
 
     ##################
     # Go to c2 level
@@ -133,12 +137,12 @@ for i in range(0, containers_config['c1']['number_to_create']):
 
             # set up values
             barcode = ''
-            name = freezer + containers_config['c1']['name_prefix'] + str(c1_index) + containers_config['c2']['name_prefix'] + str(c2_index)
+            name = c1_parent_name + name_delimiter + containers_config['c2']['name_prefix'] + str(c2_index)
+            c2_parent_name = name
             barcode_location = containers_config['c1']['barcode_prefix'] + str(containers_config['c1']['barcode_starting_index'])
 
             # add data to list
             c2_exceldata.append([barcode, name, barcode_location])
-
 
             ##################
             # Go to c3 level
@@ -149,7 +153,8 @@ for i in range(0, containers_config['c1']['number_to_create']):
 
                     # set up values
                     barcode = ''
-                    name = freezer + containers_config['c1']['name_prefix'] + str(c1_index) + containers_config['c2']['name_prefix'] + str(c2_index) + containers_config['c3']['name_prefix'] + str(c3_index)
+                    name = c2_parent_name + name_delimiter + containers_config['c3']['name_prefix'] + str(c3_index)
+                    c3_parent_name = name
                     barcode_location = containers_config['c2']['barcode_prefix'] + str(containers_config['c2']['barcode_starting_index'])
 
                     # add data to list
@@ -165,7 +170,7 @@ for i in range(0, containers_config['c1']['number_to_create']):
 
                             # set up values
                             barcode = ''
-                            name = freezer + containers_config['c1']['name_prefix'] + str(c1_index) + containers_config['c2']['name_prefix'] + str(c2_index) + containers_config['c3']['name_prefix'] + str(c3_index) + containers_config['c4']['name_prefix'] + str(c4_index)
+                            name = c3_parent_name + name_delimiter + containers_config['c4']['name_prefix'] + str(c4_index)
                             barcode_location = containers_config['c3']['barcode_prefix'] + str(containers_config['c3']['barcode_starting_index'])
 
                             # add data to list
