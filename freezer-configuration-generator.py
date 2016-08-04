@@ -17,16 +17,16 @@ import xlsxwriter
 # for example, F2S3R1D1B4 vs F2-S3-R1-D1-B4
 name_delimiter = '-'
 
-# Freezer name and barcode
-freezer = 'F2'
-barcode_freezer = 'FRZ2'
-
 # Prefix and 'Starting index' needs to be looked up in C.I. LIMS via the
 # Admin > Location > ENTITY_TYPE > List All. From there, find the
 # appropriate values
 
 # What containers should be built?
-containers_to_use = ['c1', 'c2', 'c3', 'c4']
+containers_to_use = ['c1', 'c2', 'c3']
+
+# Freezer name and barcode
+freezer = 'FE'
+barcode_freezer = 'FRZ4'
 
 # Configuration of containers to build
 containers_config = {
@@ -202,7 +202,6 @@ dict['c4'] = c4_exceldata
 for c in containers_to_use:
     filename = c + '_exceldata.xlsx'
     array_name = str(c) + '_exceldata'
-    #writeExcel('c1_exceldata.xlsx', c1_exceldata)
     writeExcel(filename, dict[c])
     print "Saved " + str(len(dict[c])) + " records to " + filename
 
