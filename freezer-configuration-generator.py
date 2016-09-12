@@ -17,12 +17,17 @@ import xlsxwriter
 # for example, F2S3R1D1B4 vs F2-S3-R1-D1-B4
 name_delimiter = '-'
 
+# when creating the location names, perhaps you don't want to recurse
+# the full name, i.e. instead of "F2-S3-R1-D1-B4" get only "B4" - the last
+# item in the name. Set to TRUE if you only want short name
+name_short = True # True for short names, False for long concatenated names
+
 # Prefix and 'Starting index' needs to be looked up in C.I. LIMS via the
 # Admin > Location > ENTITY_TYPE > List All. From there, find the
 # appropriate values
 
 # What containers should be built?
-containers_to_use = ['c1', 'c2', 'c3']
+containers_to_use = ['c1', 'c2', 'c3', 'c4']
 
 # Freezer name and barcode
 freezer = 'FE'
@@ -120,7 +125,12 @@ for i in range(0, containers_config['c1']['number_to_create']):
 
     # set up values
     barcode = ''
-    name = freezer + name_delimiter + containers_config['c1']['name_prefix'] + str(c1_index)
+
+    if name_short is False:
+        name = freezer + name_delimiter + containers_config['c1']['name_prefix'] + str(c1_index)
+    else:
+        name = containers_config['c1']['name_prefix'] + str(c1_index)
+
     c1_parent_name = name
     barcode_location = barcode_freezer
 
@@ -137,7 +147,12 @@ for i in range(0, containers_config['c1']['number_to_create']):
 
             # set up values
             barcode = ''
-            name = c1_parent_name + name_delimiter + containers_config['c2']['name_prefix'] + str(c2_index)
+
+            if name_short is False:
+                name = name = c1_parent_name + name_delimiter + containers_config['c2']['name_prefix'] + str(c2_index)
+            else:
+                name = containers_config['c2']['name_prefix'] + str(c2_index)
+
             c2_parent_name = name
             barcode_location = containers_config['c1']['barcode_prefix'] + str(containers_config['c1']['barcode_starting_index'])
 
@@ -153,7 +168,12 @@ for i in range(0, containers_config['c1']['number_to_create']):
 
                     # set up values
                     barcode = ''
-                    name = c2_parent_name + name_delimiter + containers_config['c3']['name_prefix'] + str(c3_index)
+
+                    if name_short is False:
+                        name = c2_parent_name + name_delimiter + containers_config['c3']['name_prefix'] + str(c3_index)
+                    else:
+                        name = containers_config['c3']['name_prefix'] + str(c3_index)
+
                     c3_parent_name = name
                     barcode_location = containers_config['c2']['barcode_prefix'] + str(containers_config['c2']['barcode_starting_index'])
 
@@ -170,7 +190,12 @@ for i in range(0, containers_config['c1']['number_to_create']):
 
                             # set up values
                             barcode = ''
-                            name = c3_parent_name + name_delimiter + containers_config['c4']['name_prefix'] + str(c4_index)
+
+                            if name_short is False:
+                                name = c3_parent_name + name_delimiter + containers_config['c4']['name_prefix'] + str(c4_index)
+                            else:
+                                name = containers_config['c4']['name_prefix'] + str(c4_index)
+
                             barcode_location = containers_config['c3']['barcode_prefix'] + str(containers_config['c3']['barcode_starting_index'])
 
                             # add data to list
@@ -181,16 +206,16 @@ for i in range(0, containers_config['c1']['number_to_create']):
 
                     # increment to next container
                     c3_index += 1
-                    containers_config['c3']['barcode_starting_index']  += 1
+                    containers_config['c3']['barcode_starting_index'] += 1
 
             # increment to next container
             c2_index += 1
-            containers_config['c2']['barcode_starting_index']  += 1
+            containers_config['c2']['barcode_starting_index'] += 1
 
 
     # increment to next container
     c1_index += 1
-    containers_config['c1']['barcode_starting_index']  += 1
+    containers_config['c1']['barcode_starting_index'] += 1
 
 print "-" * 80
 dict = {}

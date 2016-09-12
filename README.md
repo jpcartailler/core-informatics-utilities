@@ -27,6 +27,12 @@ Pick a delimiter - when creating the location names, include a delimiter if desi
 name_delimiter = '-'
 ```
 
+If, instead of the concatenated names, all that is needed is the current level name, then set the following to True. i.e. instead of "F2-S3-R1-D1-B4" get only "B4".
+
+```python
+name_short = True # True for short names, False for long concatenated names
+```
+
 Set up the freezer:
 ```python
 freezer = 'F2'
