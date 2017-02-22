@@ -11,6 +11,7 @@ See README.md for documentation.
 
 import xlsxwriter
 import yaml
+import os
 
 # ----------------------------------------------------------------------------------------------------------------------
 # INITIALIZATION START
@@ -158,9 +159,21 @@ dict['c3'] = c3_exceldata
 dict['c4'] = c4_exceldata
 
 for c in containers_to_use:
-    filename = 'output/' + c + '_exceldata.xlsx'
-    array_name = str(c) + '_exceldata'
-    writeExcel(filename, dict[c])
-    print "Saved " + str(len(dict[c])) + " records to " + filename
+
+    dirPath = os.path.dirname(os.path.realpath(__file__))
+
+    filename = dirPath + '/output/' + c + '_exceldata.xlsx'
+
+    if not os.path.exists(os.path.dirname(filename)):
+        try:
+            os.makedirs(os.path.dirname(filename))
+        except OSError as exc:  # Guard against race condition
+            if exc.errno != errno.EEXIST:
+                raise
+    with open(filename, "w") as f:
+
+        array_name = str(c) + '_exceldata'
+        writeExcel(filename, dict[c])
+        print "Saved " + str(len(dict[c])) + " records to " + filename
 
 print "-" * 80
