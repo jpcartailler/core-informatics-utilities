@@ -10,60 +10,31 @@ See README.md for documentation.
 '''
 
 import xlsxwriter
+import yaml
 
-# CONFIGURATION START ----------------------------------
+# ----------------------------------------------------------------------------------------------------------------------
+# INITIALIZATION START
+#
+c1_exceldata = []
+c2_exceldata = []
+c3_exceldata = []
+c4_exceldata = []
 
-# when creating the location names, include a delimiter if desired
-# for example, F2S3R1D1B4 vs F2-S3-R1-D1-B4
-name_delimiter = '-'
 
-# Prefix and 'Starting index' needs to be looked up in C.I. LIMS via the
-# Admin > Location > ENTITY_TYPE > List All. From there, find the
-# appropriate values
+# ----------------------------------------------------------------------------------------------------------------------
+# CONFIGURATION START
+#
+yaml_file = 'configurations/freezer_01_addRack6toShelf1.yaml'
 
-# What containers should be built?
-containers_to_use = ['c1', 'c2', 'c3']
+try:
+    containers_config = yaml.load(file(yaml_file, 'r'))
+except yaml.YAMLError, exc:
+    print "Error in YAML configuration file:", exc
 
-# Freezer name and barcode
-freezer = 'FE'
-barcode_freezer = 'FRZ4'
 
-# Configuration of containers to build
-containers_config = {
-    'c1': {
-        'name_prefix': 'S',
-        'name_starting_index': 1,
-        'barcode_prefix': 'SHF',
-        'barcode_starting_index': 4,
-        'number_to_create': 3
-    },
-    'c2': {
-        'name_prefix': 'R',
-        'name_starting_index': 1,
-        'barcode_prefix': 'RCK',
-        'barcode_starting_index': 31,
-        'number_to_create': 5
-    },
-    'c3': {
-        'name_prefix': 'D',
-        'name_starting_index': 1,
-        'barcode_prefix': 'DRW',
-        'barcode_starting_index': 255,
-        'number_to_create': 7
-    },
-    'c4': {
-        'name_prefix': 'B',
-        'name_starting_index': 1,
-        'barcode_prefix': 'FB',
-        'barcode_starting_index': 421,
-        'number_to_create': 4
-    }
-}
-
-# CONFIGURATION END ------------------------------------
-
-# FUNCTIONS --------------------------------------------
-
+# ----------------------------------------------------------------------------------------------------------------------
+# FUNCTIONS START
+#
 def writeExcel(filename, data):
 
     workbook = xlsxwriter.Workbook(filename)
@@ -88,31 +59,15 @@ def writeExcel(filename, data):
 
 
 
-# CODE # FUNCTIONS --------------------------------------------
-# print containers_to_use
-# ranges = [ range(x) for x in containers_to_use ]
-# for i in itertools.product(*ranges):
-#     print i
-
-
-
-# for key, value in sorted(containers_config.items()):
+# ----------------------------------------------------------------------------------------------------------------------
+# BUILD CONFIGURATION
 #
-#     print '-' * 20
-#     print 'Processing container ' + key
-#
-#     # Get individual container data
-#     for key2, value2 in value.items():
-#         print key2, value2
+freezer = containers_config['freezer']
+barcode_freezer = containers_config['barcode_freezer']
+name_delimiter = containers_config['name_delimiter']
+containers_to_use = containers_config['containers_to_use']
 
-c1_exceldata = []
-c2_exceldata = []
-c3_exceldata = []
-c4_exceldata = []
-c1_exceldata
-# Loop through each container
 
-##################
 # Go to c1 level
 c1_index = containers_config['c1']['name_starting_index'] # reset shelf index foreach rack
 
@@ -192,6 +147,9 @@ for i in range(0, containers_config['c1']['number_to_create']):
     c1_index += 1
     containers_config['c1']['barcode_starting_index']  += 1
 
+# ----------------------------------------------------------------------------------------------------------------------
+# WRITE EXCEL FILES
+#
 print "-" * 80
 dict = {}
 dict['c1'] = c1_exceldata
@@ -200,7 +158,7 @@ dict['c3'] = c3_exceldata
 dict['c4'] = c4_exceldata
 
 for c in containers_to_use:
-    filename = c + '_exceldata.xlsx'
+    filename = 'output/' + c + '_exceldata.xlsx'
     array_name = str(c) + '_exceldata'
     writeExcel(filename, dict[c])
     print "Saved " + str(len(dict[c])) + " records to " + filename

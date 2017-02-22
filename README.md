@@ -20,23 +20,27 @@ In the first example, one might want to configure 1 freezer, which contains 3 sh
 
 The script abstracts out each level into a "container", creating a tree described as c1 > c2 > c3 > c4 where c1 is the parent of c2, etc...
 ### Input
-Currently, the input is setup within the script, but this could eventually be factored out into a config/input file. For the example above, the following configuration would work:
+The configuration parameters are to be loaded via a YAML-based configuration file, which is easier for humans to edit. See `configuration/sample_configuration.yaml` for an example that matches the example above.
 
 Pick a delimiter - when creating the location names, include a delimiter if desired. For example, F2S3R1D1B4 vs F2-S3-R1-D1-B4:
-```python
-name_delimiter = '-'
+```yaml
+name_delimiter: "-"
 ```
-
-Set up the freezer:
-```python
-freezer = 'F2'
-barcode_freezer = 'FRZ2'
-```
-
 Set what containers to parse through:
-```python
-containers_to_use = ['c1', 'c2', 'c3', 'c4']
+```yaml
+containers_to_use:
+  - c1
+  - c2
+  - c3
+  - c4
 ```
+Set up the freezer:
+```yaml
+freezer: F1
+barcode_freezer: FRZ1
+```
+
+
 
 Lastly, populate the following dictionary in a way that best reflects your environment. Here are definitions of the configuration options:
 
@@ -44,37 +48,31 @@ Lastly, populate the following dictionary in a way that best reflects your envir
 * **name_starting_index** - the human-readable container-integer for this level. Example: '1' would be added to 'S' to create 'S1' (Shelf #1).
 * **barcode_prefix** - the LIMS-specific barcode for the container type. Example 'SHF' for Shelf.
 * **barcode_starting_index** - the LIMS-specific and next-available barcode integer for the container in question. Example: '374' should be added to 'SHF' to create 'SHF374' (LIMS unique barcode identifier for that shelf container)
-```python
-containers_config = {
-    'c1': {
-        'name_prefix': 'S',
-        'name_starting_index': 1,
-        'barcode_prefix': 'SHF',
-        'barcode_starting_index': 4,
-        'number_to_create': 3
-    },
-    'c2': {
-        'name_prefix': 'R',
-        'name_starting_index': 1,
-        'barcode_prefix': 'RCK',
-        'barcode_starting_index': 31,
-        'number_to_create': 5
-    },
-    'c3': {
-        'name_prefix': 'D',
-        'name_starting_index': 1,
-        'barcode_prefix': 'DRW',
-        'barcode_starting_index': 255,
-        'number_to_create': 7
-    },
-    'c4': {
-        'name_prefix': 'B',
-        'name_starting_index': 1,
-        'barcode_prefix': 'FB',
-        'barcode_starting_index': 421,
-        'number_to_create': 4
-    }
-}
+```yaml
+c1:
+  name_prefix: S
+  name_starting_index: 1
+  barcode_prefix: SHF
+  barcode_starting_index: 1
+  number_to_create: 3
+c2:
+  name_prefix: R
+  name_starting_index: 1
+  barcode_prefix: RCK
+  barcode_starting_index: 1
+  number_to_create: 5
+c3:
+  name_prefix: D
+  name_starting_index: 1
+  barcode_prefix: DRW
+  barcode_starting_index: 1
+  number_to_create: 7
+c4:
+  name_prefix: FB
+  name_starting_index: 1
+  barcode_prefix: FB
+  barcode_starting_index: 1
+  number_to_create: 4
 ```
 
 ### Output
@@ -94,8 +92,9 @@ Example Excel output:
 |  | F2S2 | FRZ2 |
 |  | F2S3 | FRZ2 |
 
-The script will output an individual spreadsheet for *each* level processed. The example above (C1 > C2 > C3 > C4) would generate c1_exceldata.xlsx, c2_exceldata.xlsx, c3_exceldata.xlsx, and c4_exceldata.xlsx.
+The script will output an individual spreadsheet for *each* level processed. The example above (C1 > C2 > C3 > C4) would generate c1_exceldata.xlsx, c2_exceldata.xlsx, c3_exceldata.xlsx, and c4_exceldata.xlsx. Files are written to a folder called `output/`.
 
 ### Dependencies
-The [xlsxwriter](https://github.com/jmcnamara/XlsxWriter) module is required and can easily be installed with
-`pip install xlsxwriter`.
+The [xlsxwriter](https://github.com/jmcnamara/XlsxWriter) module is required and can easily be installed with `pip install xlsxwriter`.
+
+The [PyYAML](http://pyyaml.org/) module is required and can easily be installed with `pip install pyyaml`.
