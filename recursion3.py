@@ -37,24 +37,29 @@ def create_freezer_records(freezer, configuration, counter=1, location=None, dat
     #if barcode_index is None:
     #    barcode_index = configuration[key]['barcode_starting_index']
     #print "barcode_index: " + str(barcode_index)
-    print "+"*60
+    print "- "*30
+
     if (counter > 1):
         parent_count = counter - 1
         parent_key = "c" + str(parent_count)
 
-        if barcode_index is None:
-            barcode_index = configuration[parent_key]['barcode_starting_index']
-            print "top/first:" + str(barcode_index)
-        else:
-            barcode_index=barcode_index
-            print "top/not first:" + str(barcode_index)
+        # if barcode_index is None:
+        #     barcode_index = configuration[parent_key]['barcode_starting_index']
+        #     print "top/first:" + str(barcode_index)
+        # else:
+        #     barcode_index=barcode_index
+        #     print "top/not first:" + str(barcode_index)
 
         parent_barcode = configuration[parent_key]['barcode_prefix'] + str(barcode_index)
 
-        barcode_index += 1
+        # barcode_index += 1
+        barcode_index = configuration[key]['barcode_starting_index']
 
     else:
+        #parent_barcode = str(configuration['c1']['barcode_prefix']) + str(configuration['c1']['barcode_starting_index'])
         parent_barcode = ''
+        barcode_index = configuration['c1']['barcode_starting_index']
+
     temp3 = location
 
     counter += 1 # increment to next level
@@ -66,7 +71,8 @@ def create_freezer_records(freezer, configuration, counter=1, location=None, dat
         #location = location + str(configuration[key]['attr1'])
         location = temp3 + str(configuration[key]['name_prefix']) + str(name_index_incr)
         #print "counter: " + str(counter)
-        print "i(" + str(i) + "). counter(" + str(counter) + ").  /  " + str(location) + " / " + parent_barcode
+        print "  key -- " + str(configuration[key])
+        print "    i: " + str(i) + " / Counter: " + str(counter) + "  /  location: " + str(location) + " / parent_barcode: " + parent_barcode
         # Parent barcode, only valid for second iteration since the first *is* the root
         # and has no parent. Hence, at level 2, we can back up and look at the previous level's
         # data. The freezer (root) bacode information will look like:
@@ -75,20 +81,25 @@ def create_freezer_records(freezer, configuration, counter=1, location=None, dat
 
         #print "parent_barcode: " + str(parent_barcode)
 
-        print "-" * 40
+        #print "-" * 40
         # write data to list
         data.append([key, location, parent_barcode])
 
         if(counter > len(configuration)):
+            # this is true when the program has exhausted configuring the current tree
+            # and it's time to move on to the next tree, so reset things... but remember
+            # to "up" the starting index
             # save new record
             barcode = ''
             #parent_barcode = ''
             #data.append([key, location, parent_barcode])
             location=''
+
         else:
             #barcode_index += 1
 
             location = location + "-"
+            print "  passing barcode_index '" + str(barcode_index) + "' to function " + " / Counter: " + str(counter)
             create_freezer_records(freezer, configuration, counter, location, data, barcode_index)
 
 
@@ -124,50 +135,50 @@ def create_excel_spreadsheets(data, configuration):
 
 
 
-configuration = {
-    'c1': {
-        'name_prefix': 'F',
-        'name_index': 1,
-        'barcode_prefix': 'FRZ',
-        'barcode_starting_index': 1,
-        'number_to_create': 1
-    },
-    'c2': {
-        'name_prefix' : 'S',
-        'name_index' : 1,
-        'barcode_prefix': 'SHF',
-        'barcode_starting_index':10,
-        'number_to_create' : 2
-    },
-    'c3': {
-        'name_prefix' : 'R',
-        'name_index' : 1,
-        'barcode_prefix': 'RCK',
-        'barcode_starting_index': 46,
-        'number_to_create' : 5
-    },
-    'c4': {
-        'name_prefix' : 'D',
-        'name_index' : 1,
-        'barcode_prefix': 'DRW',
-        'barcode_starting_index': 255,
-        'number_to_create' : 7
-    },
-    'c5': {
-        'name_prefix' : 'B',
-        'name_index' : 1,
-        'barcode_prefix': 'FB',
-        'barcode_starting_index': 421,
-        'number_to_create' : 4
-    }
-}
+# configuration = {
+#     'c1': {
+#         'name_prefix': 'F',
+#         'name_index': 1,
+#         'barcode_prefix': 'FRZ',
+#         'barcode_starting_index': 1,
+#         'number_to_create': 1
+#     },
+#     'c2': {
+#         'name_prefix' : 'S',
+#         'name_index' : 1,
+#         'barcode_prefix': 'SHF',
+#         'barcode_starting_index':10,
+#         'number_to_create' : 2
+#     },
+#     'c3': {
+#         'name_prefix' : 'R',
+#         'name_index' : 1,
+#         'barcode_prefix': 'RCK',
+#         'barcode_starting_index': 46,
+#         'number_to_create' : 5
+#     },
+#     'c4': {
+#         'name_prefix' : 'D',
+#         'name_index' : 1,
+#         'barcode_prefix': 'DRW',
+#         'barcode_starting_index': 255,
+#         'number_to_create' : 7
+#     },
+#     'c5': {
+#         'name_prefix' : 'B',
+#         'name_index' : 1,
+#         'barcode_prefix': 'FB',
+#         'barcode_starting_index': 421,
+#         'number_to_create' : 4
+#     }
+# }
 
 configuration = {
     'c1': {
         'name_prefix': 'F',
-        'name_index': 1,
+        'name_index': 4,
         'barcode_prefix': 'FRZ',
-        'barcode_starting_index': 1,
+        'barcode_starting_index': 23,
         'number_to_create': 1
     },
     'c2': {
@@ -182,7 +193,15 @@ configuration = {
         'name_index': 1,
         'barcode_prefix': 'RCK',
         'barcode_starting_index': 46,
-        'number_to_create': 5
+        'number_to_create': 2
+    }
+    ,
+    'c4': {
+        'name_prefix' : 'D',
+        'name_index' : 1,
+        'barcode_prefix': 'DRW',
+        'barcode_starting_index': 255,
+        'number_to_create' : 2
     }
 }
 
@@ -190,10 +209,10 @@ configuration = {
 # Create freezer records
 data = create_freezer_records('F1', configuration)
 
+#pprint.pprint(data)
 # Create spreadsheets
 sheets = create_excel_spreadsheets(data, configuration)
 
 # Testing
 # print ""
-print "+" * 60
 #pprint.pprint(sheets)
