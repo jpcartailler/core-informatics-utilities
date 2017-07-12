@@ -13,6 +13,21 @@ import xlsxwriter
 import yaml
 import os
 
+
+# ----------------------------------------------------------------------------------------------------------------------
+# CONFIGURATION START
+#
+yaml_file = ''
+
+try:
+    containers_config = yaml.load(file(yaml_file, 'r'))
+except yaml.YAMLError, exc:
+    print "Error in YAML configuration file:", exc
+
+
+output_dir = os.path.splitext(os.path.basename(yaml_file))[0]
+
+
 # ----------------------------------------------------------------------------------------------------------------------
 # INITIALIZATION START
 #
@@ -20,18 +35,6 @@ c1_exceldata = []
 c2_exceldata = []
 c3_exceldata = []
 c4_exceldata = []
-
-
-# ----------------------------------------------------------------------------------------------------------------------
-# CONFIGURATION START
-#
-yaml_file = 'configurations/freezer_01_addRack6toShelf1.yaml'
-
-try:
-    containers_config = yaml.load(file(yaml_file, 'r'))
-except yaml.YAMLError, exc:
-    print "Error in YAML configuration file:", exc
-
 
 # ----------------------------------------------------------------------------------------------------------------------
 # FUNCTIONS START
@@ -162,7 +165,7 @@ for c in containers_to_use:
 
     dirPath = os.path.dirname(os.path.realpath(__file__))
 
-    filename = dirPath + '/output/' + c + '_exceldata.xlsx'
+    filename = dirPath + '/output/' + output_dir + '/' + c + '_exceldata.xlsx'
 
     if not os.path.exists(os.path.dirname(filename)):
         try:
