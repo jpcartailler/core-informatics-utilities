@@ -92,7 +92,7 @@ Example Excel output:
 |  | F2S2 | FRZ2 |
 |  | F2S3 | FRZ2 |
 
-The script will output an individual spreadsheet for *each* level processed. The example above (C1 > C2 > C3 > C4) would generate c1_exceldata.xlsx, c2_exceldata.xlsx, c3_exceldata.xlsx, and c4_exceldata.xlsx. Files are written to a folder called `output/`.
+The script will output an individual spreadsheet for *each* level processed. The example above (C1 > C2 > C3 > C4) would generate c1_exceldata.xlsx, c2_exceldata.xlsx, c3_exceldata.xlsx, and c4_exceldata.xlsx. Files are written to the `output/` folder, within a subfolder named after the configuration filename (without path or file extension). In the case of the input file 'configuration/sample_configuration.yaml', the output folder/subfolder would be 'output/sample_configuration/'.
 
 ### Dependencies
 The [xlsxwriter](https://github.com/jmcnamara/XlsxWriter) module is required and can easily be installed with `pip install xlsxwriter`.
