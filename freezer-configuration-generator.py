@@ -17,7 +17,7 @@ import os
 # ----------------------------------------------------------------------------------------------------------------------
 # CONFIGURATION START
 #
-yaml_file = ''
+yaml_file = 'configurations/block-filing-system.yaml'
 
 try:
     containers_config = yaml.load(file(yaml_file, 'r'))
@@ -79,7 +79,14 @@ for i in range(0, containers_config['c1']['number_to_create']):
 
     # set up values
     barcode = ''
-    name = freezer + name_delimiter + containers_config['c1']['name_prefix'] + str(c1_index)
+
+    # name padding
+    if('name_padding' in containers_config['c1']) and (containers_config['c1']['name_padding'] > 0 ):
+        c1_index_formatted = str(c1_index).zfill(containers_config['c1']['name_padding'])
+    else:
+        c1_index_formatted = str(c1_index)
+
+    name = freezer + name_delimiter + containers_config['c1']['name_prefix'] + str(c1_index_formatted)
     c1_parent_name = name
     barcode_location = barcode_freezer
 
@@ -96,7 +103,14 @@ for i in range(0, containers_config['c1']['number_to_create']):
 
             # set up values
             barcode = ''
-            name = c1_parent_name + name_delimiter + containers_config['c2']['name_prefix'] + str(c2_index)
+
+            # name padding
+            if ('name_padding' in containers_config['c2']) and (containers_config['c2']['name_padding'] > 0):
+                c2_index_formatted = str(c2_index).zfill(containers_config['c2']['name_padding'])
+            else:
+                c2_index_formatted = str(c2_index)
+
+            name = c1_parent_name + name_delimiter + containers_config['c2']['name_prefix'] + c2_index_formatted
             c2_parent_name = name
             barcode_location = containers_config['c1']['barcode_prefix'] + str(containers_config['c1']['barcode_starting_index'])
 
@@ -112,7 +126,14 @@ for i in range(0, containers_config['c1']['number_to_create']):
 
                     # set up values
                     barcode = ''
-                    name = c2_parent_name + name_delimiter + containers_config['c3']['name_prefix'] + str(c3_index)
+
+                    # name padding
+                    if ('name_padding' in containers_config['c3']) and (containers_config['c3']['name_padding'] > 0):
+                        c3_index_formatted = str(c3_index).zfill(containers_config['c3']['name_padding'])
+                    else:
+                        c3_index_formatted = str(c3_index)
+
+                    name = c2_parent_name + name_delimiter + containers_config['c3']['name_prefix'] + c3_index_formatted
                     c3_parent_name = name
                     barcode_location = containers_config['c2']['barcode_prefix'] + str(containers_config['c2']['barcode_starting_index'])
 
@@ -129,7 +150,14 @@ for i in range(0, containers_config['c1']['number_to_create']):
 
                             # set up values
                             barcode = ''
-                            name = c3_parent_name + name_delimiter + containers_config['c4']['name_prefix'] + str(c4_index)
+
+                            # name padding
+                            if ('name_padding' in containers_config['c4']) and (containers_config['c4']['name_padding'] > 0):
+                                c4_index_formatted = str(c4_index).zfill(containers_config['c4']['name_padding'])
+                            else:
+                                c4_index_formatted = str(c4_index)
+
+                            name = c3_parent_name + name_delimiter + containers_config['c4']['name_prefix'] + c4_index_formatted
                             barcode_location = containers_config['c3']['barcode_prefix'] + str(containers_config['c3']['barcode_starting_index'])
 
                             # add data to list
