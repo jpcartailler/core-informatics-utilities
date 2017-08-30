@@ -24,15 +24,19 @@ barcode_freezer: DRW513
 # Prefix and 'Starting index' needs to be looked up in C.I. LIMS via the
 # Admin > Location > ENTITY_TYPE > List All. From there, find the
 # appropriate values
+# name_padding is the argument for the zfill function, "2" would be for
+# forcing 2 digits (01, 02, up to 10), 3 for 010, etc...
 c1:
   name_prefix: R
   name_starting_index: 1
+  name_padding: 0
   barcode_prefix: RCK
   barcode_starting_index: 80
   number_to_create: 9
 c2:
   name_prefix: S
   name_starting_index: 1
+  name_padding: 3
   barcode_prefix: STE
   barcode_starting_index: 1
   number_to_create: 25
