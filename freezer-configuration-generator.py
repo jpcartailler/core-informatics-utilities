@@ -17,7 +17,7 @@ import os
 # ----------------------------------------------------------------------------------------------------------------------
 # CONFIGURATION START
 #
-yaml_file = 'configurations/block-filing-system.yaml'
+yaml_file = 'configurations/reconfigure_freezer2-shelf1.yaml'
 
 try:
     containers_config = yaml.load(file(yaml_file, 'r'))
