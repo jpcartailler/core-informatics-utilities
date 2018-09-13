@@ -17,7 +17,7 @@ import os
 # ----------------------------------------------------------------------------------------------------------------------
 # CONFIGURATION START
 #
-yaml_file = 'configurations/reconfigure_freezer2-shelf1.yaml'
+yaml_file = 'configurations/freezer_01_add_rack_toshelf2.yaml'
 
 try:
     containers_config = yaml.load(file(yaml_file, 'r'))
