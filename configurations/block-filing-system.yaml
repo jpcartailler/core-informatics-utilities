@@ -1,0 +1,39 @@
+---
+#
+# Core Informatics Freezer YAML configuration
+#
+
+# 1 cabinet (BFS)
+# 6 drawers (DRW)
+# 7 lanes (LNE)
+
+# When assembling location names, include a delimiter if desired
+# for example, F2S3R1D1B4 vs F2-S3-R1-D1-B4
+name_delimiter: "-"
+
+# Container levels to build
+containers_to_use:
+  - c1
+  - c2
+
+# Name and barcode of (parent) freezer
+freezer: C1
+barcode_freezer: BFS1
+
+# Container specifications
+# Prefix and 'Starting index' needs to be looked up in C.I. LIMS via the
+# Admin > Location > ENTITY_TYPE > List All. From there, find the
+# appropriate values
+c1:
+  name_prefix: D
+  name_starting_index: 1
+  barcode_prefix: DRW
+  barcode_starting_index: 507
+  number_to_create: 6
+c2:
+  name_prefix: L
+  name_starting_index: 1
+  barcode_prefix: LNE
+  barcode_starting_index: 1
+  number_to_create: 7
+...
