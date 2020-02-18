@@ -17,12 +17,12 @@ import os
 # ----------------------------------------------------------------------------------------------------------------------
 # CONFIGURATION START
 #
-yaml_file = 'configurations/reconfigure_freezer1-shelf3.yaml'
+yaml_file = 'configurations/block-filing-system-2.yaml'
 
 try:
-    containers_config = yaml.load(file(yaml_file, 'r'))
-except yaml.YAMLError, exc:
-    print "Error in YAML configuration file:", exc
+    containers_config = yaml.safe_load(open(yaml_file, 'r'))
+except yaml.YAMLError as exc:
+    print("Error in YAML configuration file:", exc)
 
 
 output_dir = os.path.splitext(os.path.basename(yaml_file))[0]
@@ -182,7 +182,7 @@ for i in range(0, containers_config['c1']['number_to_create']):
 # ----------------------------------------------------------------------------------------------------------------------
 # WRITE EXCEL FILES
 #
-print "-" * 80
+print("-" * 80)
 dict = {}
 dict['c1'] = c1_exceldata
 dict['c2'] = c2_exceldata
@@ -205,6 +205,6 @@ for c in containers_to_use:
 
         array_name = str(c) + '_exceldata'
         writeExcel(filename, dict[c])
-        print "Saved " + str(len(dict[c])) + " records to " + filename
+        print("Saved " + str(len(dict[c])) + " records to " + filename)
 
-print "-" * 80
+print("-" * 80)
