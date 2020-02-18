@@ -17,7 +17,7 @@ import os
 # ----------------------------------------------------------------------------------------------------------------------
 # CONFIGURATION START
 #
-yaml_file = 'configurations/freezer_03_shelf2.yaml'
+yaml_file = 'configurations/freezer_03_shelf3.yaml'
 
 try:
     containers_config = yaml.safe_load(open(yaml_file, 'r'))
