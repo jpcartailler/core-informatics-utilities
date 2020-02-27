@@ -31,24 +31,24 @@ c1:
   name_prefix: S
   name_starting_index: 3
   barcode_prefix: SHF
-  barcode_starting_index: 26
+  barcode_starting_index: 27
   number_to_create: 1
 c2:
   name_prefix: R
   name_starting_index: 1
   barcode_prefix: RCK
-  barcode_starting_index: 100
+  barcode_starting_index: 110
   number_to_create: 3
 c3:
   name_prefix: CL
   name_starting_index: 1
   barcode_prefix: SLC
-  barcode_starting_index: 34
+  barcode_starting_index: 52
   number_to_create: 3
 c4:
   name_prefix: RW
   name_starting_index: 1
   barcode_prefix: SLR
-  barcode_starting_index: 232
+  barcode_starting_index: 358
   number_to_create: 7
 ...
