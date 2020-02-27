@@ -28,12 +28,12 @@ c1:
   name_prefix: D
   name_starting_index: 1
   barcode_prefix: DRW
-  barcode_starting_index: 514
+  barcode_starting_index: 563
   number_to_create: 6
 c2:
   name_prefix: L
   name_starting_index: 1
   barcode_prefix: LNE
-  barcode_starting_index: 44
+  barcode_starting_index: 43
   number_to_create: 7
 ...
